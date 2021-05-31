@@ -13,7 +13,7 @@ Foi construída uma API utilizando Spring Boot, Spock Framework (testes) e bibli
 de anotações, que deixam o código mais limpo.
 
 
-### Funcionamento
+# Funcionamento
 
 O projeto basicamente busca os dados JSON do arquivo ao inicializar e os deixa em memória.
 Quando as requests são executadas ele aplica as regras de negócio para o tipo de request.
@@ -21,14 +21,14 @@ Quando as requests são executadas ele aplica as regras de negócio para o tipo 
 Obs.: Poderia até ficar já em memória com as regras basicas aplicadas e com os resultados filtrados, para ser mais performático,
 mas como quis deixar o código pronto a inserção de um banco de dados, deixei o tratamento na hora da realização da request
 
-### Instruções
+# Instruções
 
-# Rodar o projeto localmente
+### Rodar o projeto localmente
 mvn spring-boot:run
 
-# Rodar os testes
+### Rodar os testes
 mvn test
 
-# Deploy
+### Deploy
 Não implementado - falta de conhecimento até o momento, procuro oportunidades de aprender e trabalhar melhor essa e
 outras skills de DevOps.
