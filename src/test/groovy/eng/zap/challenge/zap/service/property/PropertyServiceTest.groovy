@@ -1,5 +1,6 @@
 package eng.zap.challenge.zap.service.property
 
+import eng.zap.challenge.zap.AppSpec
 import eng.zap.challenge.zap.http.request.RequestFilter
 import eng.zap.challenge.zap.model.property.Address
 import eng.zap.challenge.zap.model.property.BusinessType
@@ -7,7 +8,8 @@ import eng.zap.challenge.zap.model.property.GeoLocation
 import eng.zap.challenge.zap.model.property.Location
 import eng.zap.challenge.zap.model.property.PricingInfos
 import eng.zap.challenge.zap.model.property.Property
-import spock.lang.Specification
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 
 import java.time.LocalDateTime
 
@@ -16,7 +18,11 @@ import static eng.zap.challenge.zap.model.property.BusinessType.SALE
 import static eng.zap.challenge.zap.model.property.ListingStatus.ACTIVE
 import static eng.zap.challenge.zap.model.property.ListingType.USED
 
-class PropertyServiceTest extends Specification {
+@SpringBootTest
+class PropertyServiceTest extends AppSpec {
+
+    @Autowired
+    PropertyService service
 
     def "ApplyUserFilters"() {
         when:
@@ -36,7 +42,7 @@ class PropertyServiceTest extends Specification {
 
     def "is inside Zap bounding box"() {
         when:
-        Boolean result = PropertyService.isInZapBoundingBox(property)
+        Boolean result = service.isInZapBoundingBox(property)
         then:
         result == expected
         where:
@@ -48,7 +54,7 @@ class PropertyServiceTest extends Specification {
 
     def "is eligible for Zap"() {
         when:
-        Boolean result = PropertyService.isEligibleToZap(property)
+        Boolean result = service.isEligibleToZap(property)
         then:
         result == expected
         where:
@@ -63,7 +69,7 @@ class PropertyServiceTest extends Specification {
 
     def "is eligible for Viva Real"() {
         when:
-        Boolean result = PropertyService.isEligibleToVivaReal(property)
+        Boolean result = service.isEligibleToVivaReal(property)
         then:
         result == expected
         where:

@@ -15,11 +15,13 @@ import javax.annotation.PostConstruct
 class PropertyService extends BaseService {
 
     DataRetrieverService retrieverService
+    RulesConfig config
     List<Property> loadedProperties = []
 
     @Autowired
-    PropertyService(DataRetrieverService retrieverService) {
+    PropertyService(DataRetrieverService retrieverService, RulesConfig config) {
         this.retrieverService = retrieverService
+        this.config = config
     }
 
     @PostConstruct
@@ -90,28 +92,28 @@ class PropertyService extends BaseService {
         return properties
     }
 
-    protected static Boolean isEligibleToZap(Property it) {
+    protected Boolean isEligibleToZap(Property it) {
         if (!it) return false
-        Double minSalePrice = RulesConfig.ZAP_MIN_SALE_PRICE
+        Double minSalePrice = config.ZAP_MIN_SALE_PRICE
         if (isInZapBoundingBox(it)) {
             minSalePrice = minSalePrice * 0.9
         }
         Boolean saleEligible = isForSale(it) && (
-                hasValidUsableAreas(it) && getSaleSquareMeterPrice(it) > RulesConfig.ZAP_MIN_SQUARE_METER_PRICE
+                hasValidUsableAreas(it) && getSaleSquareMeterPrice(it) > config.ZAP_MIN_SQUARE_METER_PRICE
                         && getSalePrice(it) >= minSalePrice
         )
         Boolean rentalEligible = isForRent(it) && (
-                getRentPrice(it) >= RulesConfig.ZAP_MIN_RENT_PRICE
+                getRentPrice(it) >= config.ZAP_MIN_RENT_PRICE
         )
         return hasValidGeoLocation(it) && saleEligible || rentalEligible
     }
 
-    protected static Boolean isEligibleToVivaReal(Property it) {
+    protected Boolean isEligibleToVivaReal(Property it) {
         if (!it) return false
         Boolean saleEligible = isForSale(it) && (
-                getSalePrice(it) <= RulesConfig.VIVA_MAX_SALE_PRICE
+                getSalePrice(it) <= config.VIVA_MAX_SALE_PRICE
         )
-        Double maxRentPrice = RulesConfig.VIVA_MAX_RENT_PRICE
+        Double maxRentPrice = config.VIVA_MAX_RENT_PRICE
         if (isInZapBoundingBox(it)) {
             maxRentPrice = maxRentPrice * 1.5
         }
@@ -122,13 +124,13 @@ class PropertyService extends BaseService {
         return hasValidGeoLocation(it) && saleEligible || rentalEligible
     }
 
-    protected static Boolean isInZapBoundingBox(Property it) {
+    protected Boolean isInZapBoundingBox(Property it) {
         Double lat = it.address.geoLocation.location.lat
         Double lon = it.address.geoLocation.location.lon
-        return lat >= RulesConfig.ZAP_BOUND_BOX_MIN_LAT &&
-                lat <= RulesConfig.ZAP_BOUND_BOX_MAX_LAT &&
-                lon >= RulesConfig.ZAP_BOUND_BOX_MIN_LON &&
-                lon <= RulesConfig.ZAP_BOUND_BOX_MAX_LON
+        return lat >= config.ZAP_BOUND_BOX_MIN_LAT &&
+                lat <= config.ZAP_BOUND_BOX_MAX_LAT &&
+                lon >= config.ZAP_BOUND_BOX_MIN_LON &&
+                lon <= config.ZAP_BOUND_BOX_MAX_LON
     }
 
     private static Boolean hasValidGeoLocation(Property it) {

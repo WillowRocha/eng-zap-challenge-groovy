@@ -17,7 +17,7 @@ class DataRetrieverService {
 
     RestTemplate restTemplate
 
-    @Value('${service.fetchUrl}')
+    @Value('${constants.fetchUrl}')
     String fetchUrl
 
     @Autowired
