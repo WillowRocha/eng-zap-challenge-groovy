@@ -16,6 +16,6 @@ class DataRetrieverController {
 
     @GetMapping('/raw')
     List<Property> getRawProperties() {
-        return service.getProperties()
+        return service.getAllAvailableProperties()
     }
 }

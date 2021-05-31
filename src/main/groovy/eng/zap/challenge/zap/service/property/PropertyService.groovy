@@ -9,14 +9,22 @@ import eng.zap.challenge.zap.service.DataRetrieverService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
+import javax.annotation.PostConstruct
+
 @Service
 class PropertyService extends BaseService {
 
     DataRetrieverService retrieverService
+    List<Property> loadedProperties = []
 
     @Autowired
     PropertyService(DataRetrieverService retrieverService) {
         this.retrieverService = retrieverService
+    }
+
+    @PostConstruct
+    void init() {
+        this.loadedProperties = retrieverService.getAllAvailableProperties()
     }
 
     Response<Property> getAllProperties(RequestFilter filter) {
@@ -32,7 +40,7 @@ class PropertyService extends BaseService {
     }
 
     protected Response<Property> getAvailableProperties(RequestFilter filter, Closure<Boolean> isEligible) {
-        List<Property> properties = retrieverService.getProperties()
+        List<Property> properties = this.loadedProperties
         Integer totalCount = 0
         if (properties) {
             properties = properties.findAll { isEligible(it) }

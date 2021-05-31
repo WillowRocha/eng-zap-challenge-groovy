@@ -25,7 +25,7 @@ class DataRetrieverService {
         this.restTemplate = restTemplate
     }
 
-    List<Property> getProperties() {
+    List<Property> getAllAvailableProperties() {
         return restTemplate.exchange(
                 fetchUrl,
                 HttpMethod.GET,
